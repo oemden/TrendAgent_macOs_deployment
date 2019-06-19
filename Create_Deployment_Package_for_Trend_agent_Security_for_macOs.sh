@@ -5,7 +5,7 @@
 # Adding a restart action so we're warned (as it reboots with no warning) : https://managingosx.wordpress.com/2012/07/05/stupid-tricks-with-pkgbuild/
 # Trend Info here:
 #  https://success.trendmicro.com/solution/1114085-mac-mass-deployment-in-worry-free-business-security-services-wfbs-svc#
-version="0.5"
+version="1.0" #
 
 ################## EDIT START #######################
 CompanyName="myCompany"
@@ -16,8 +16,9 @@ pkg_name="${CompanyName}.deploy-WFBS-SVC_Agent_Installer.${deploymentPkgVersion}
 ################## EDIT STOP ########################
 
 #####################################################
-my_path=`dirname $0`
-my_name=`basename $0`
+my_path=`dirname ${0}`
+my_name=`basename ${0}`
+my_absolutepath="$(cd '${my_path}' ; pwd -P )"
 TrendCorpIdentifier="${1}"
 WFBS_SVC_Agent_Installer="${2}"
 WFBS_SVC_Agent_Installer_name=`basename $2`
@@ -49,12 +50,13 @@ fi
 clear ; echo 
 #echo "${my_path}"
 cd "${my_path}"
-mkdir -p ./root/tmp
+mkdir -p ./root/tmp/TrendMicro
 mkdir -p ./{scripts,inf}
 #####################################################
 
 function echovars {
  echo "	my_path: ${my_path}"
+ echo "	my_absolutepath: ${my_absolutepath}"
  echo "	my_name: ${my_name}"
  echo "	pkg_identifier: ${pkg_identifier}"
  echo "	pkg_name: ${pkg_name}"
@@ -64,11 +66,11 @@ function echovars {
 }
 
 function createIdentifierplist () {
- defaults write "${my_path}"/root/tmp/Identifier.plist Identifier "${TrendCorpIdentifier}"
+ defaults write "${my_absolutepath}"/root/var/tmp/TrendMicro/Identifier.plist Identifier "${TrendCorpIdentifier}"
 }
 
 function copyAgent () {
- ditto "${WFBS_SVC_Agent_Installer}" "${my_path}"/root/tmp/
+ ditto "${WFBS_SVC_Agent_Installer}" "${my_absolutepath}"/root/var/tmp/TrendMicro/
 }
 
 function createPostinstallscript () {
@@ -86,7 +88,7 @@ else
     TARGET="\$3"
 fi
 
-TrendIdentifier="\${TARGET}/tmp/Identifier.plist"
+TrendIdentifier="\${TARGET}/var/tmp/TrendMicro/Identifier.plist"
 
 ## must run sudo
 my_id="\$(id -u)"
@@ -102,15 +104,15 @@ if [[ ! "\${TrendIdentifier}" ]] ; then
 fi
 
 ## unzip the Trend Agent .pkg
-ditto -xk "\${TARGET}"/tmp/WFBS-SVC_Agent_Installer.pkg.zip "\${TARGET}"/tmp/
+ditto -xk "\${TARGET}"/var/tmp/TrendMicro/WFBS-SVC_Agent_Installer.pkg.zip "\${TARGET}"/var/tmp/TrendMicro/
 # let's sleep a bit...
 sleep 10
 ## install the Agent pkg
-installer -pkg "\${TARGET}"/tmp/WFBS-SVC_Agent_Installer.pkg -tgt /
+installer -pkg "\${TARGET}"/var/tmp/TrendMicro/WFBS-SVC_Agent_Installer.pkg -tgt /
 
 #Clean Up
 rm -f "\${TrendIdentifier}"
-rm -f "\${TARGET}"/tmp/WFBS-SVC_Agent_Installer*
+rm -f "\${TARGET}"/var/tmp/TrendMicro/WFBS-SVC_Agent_Installer*
 
 exit 0
 
@@ -134,11 +136,13 @@ function createDeploymentPkg () {
 }
 
 function cleanThisUp {
- rm -Rf ./{root,scripts,inf}
+echo
+rm -Rf ./{root,scripts,inf}
 }
 
 ################# Do_It ############################
 echo "	Creating pkg ${pkg_name} " ; echo 
+
 createIdentifierplist
 copyAgent
 createPostinstallscript
@@ -148,6 +152,6 @@ cleanThisUp
 echo ; echo "	Package ${pkg_name} created "
 
 ## Open the containing folder
-echo ; echo "	Opening folder ${my_path}" ; open ./ ; echo 
+echo ; echo "	Opening folder ${my_absolutepath}" ; open ./ ; echo 
 
 exit 0
