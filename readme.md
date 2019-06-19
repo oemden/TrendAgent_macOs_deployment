@@ -33,7 +33,7 @@ https://success.trendmicro.com/solution/1114085-mac-mass-deployment-in-worry-fre
 Run the script with the Identifier as **first argument** and the Agent package path as **second argument**
 
 ```
-./Create_Deployment_Package_for_Trend_agent_Security_for_macOs.sh "MyCompanyIdentifier" /path/to/WFBS-SVC_Agent_Installer.pkg
+./Create_Deployment_Package_for_Trend_agent_Security_for_macOs.sh "MyCompanyIdentifier" /path/to/WFBS-SVC_Agent_Installer.pkg.zip
 ```
 
 example:
