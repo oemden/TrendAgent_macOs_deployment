@@ -1,4 +1,4 @@
-#Create Deployment Package for Trend agent Security ( for macOs )
+# Create Deployment Package for Trend agent Security ( for macOs )
 
 This script will create a ready to deploy Package for Mac Mass Deployment of Worry-Free Business Security Services (WFBS-SVC). 
 
