@@ -1,6 +1,6 @@
 #!/bin/bash
 ## oem at oemden dot com
-# create the package 
+# create the package
 # Now with receipt and thus version thx to https://managingosx.wordpress.com/2015/05/20/pseudo-payload-free-pkgs-with-pkgbuild/
 # Adding a restart action so we're warned (as it reboots with no warning) : https://managingosx.wordpress.com/2012/07/05/stupid-tricks-with-pkgbuild/
 # Trend Info here:
@@ -47,10 +47,10 @@ if [[ ! "${2}" ]] ; then
 fi
 
 #####################################################
-clear ; echo 
+clear ; echo
 #echo "${my_path}"
 cd "${my_path}"
-mkdir -p ./root/tmp/TrendMicro
+mkdir -p ./root/var/tmp/TrendMicro
 mkdir -p ./{scripts,inf}
 #####################################################
 
@@ -81,7 +81,7 @@ function createPostinstallscript () {
 # v${version}
 #  https://success.trendmicro.com/solution/1114085-mac-mass-deployment-in-worry-free-business-security-services-wfbs-svc#
 
-## Prefix all paths with 
+## Prefix all paths with
 if [ "\$3" == "/" ]; then
     TARGET=""
 else
@@ -94,7 +94,7 @@ TrendIdentifier="\${TARGET}/var/tmp/TrendMicro/Identifier.plist"
 my_id="\$(id -u)"
 if [[ "\${my_id}" -ne 0 ]] ; then
  printf " == Must be run as sudo, exiting == "
- echo 
+ echo
  exit 1
 fi
 
@@ -141,7 +141,7 @@ rm -Rf ./{root,scripts,inf}
 }
 
 ################# Do_It ############################
-echo "	Creating pkg ${pkg_name} " ; echo 
+echo "	Creating pkg ${pkg_name} " ; echo
 
 createIdentifierplist
 copyAgent
@@ -152,6 +152,6 @@ cleanThisUp
 echo ; echo "	Package ${pkg_name} created "
 
 ## Open the containing folder
-echo ; echo "	Opening folder ${my_absolutepath}" ; open ./ ; echo 
+echo ; echo "	Opening folder ${my_absolutepath}" ; open ./ ; echo
 
 exit 0
