@@ -35,4 +35,13 @@ rm -rf /Applications/TrendMicroSecurity.app
 killall -kill TmLoginMgr
 killall -kill UIMgmt
 
+## Remove All Trend receipts
+pkgutil --forget com.trendmicro.icore.autostart.pkg
+pkgutil --forget com.trendmicro.icore.kextention.pkg
+pkgutil --forget com.trendmicro.icore.service.pkg
+pkgutil --forget com.trendmicro.tmsm.application.trendMicroSecurity.tmcoreinst.pkg
+pkgutil --forget com.trendmicro.tmsm.application.trendMicroSecurity.tmsecurity.pkg
+pkgutil --forget com.trendmicro.tmsm.application.trendMicroSecurity.tmsecurityextra.pkg
+pkgutil --forget com.trendmicro.tmsm.tmappextra
+
 exit 0
